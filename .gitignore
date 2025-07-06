@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+x64/*
+Wiki_Grabber_2_0/*
+.vs/*
