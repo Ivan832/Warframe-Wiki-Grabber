@@ -16,12 +16,9 @@ CURL* curl;
 // }
 
 #include "Form1.h"
-//#define print(...) printf(__VA_ARGS__)
 
-//std::string Aquisition = "";
 
 using namespace System::Windows::Forms;
-//std::string Aquisition();
 
 [STAThread]
 int main()
@@ -53,28 +50,59 @@ int main()
 	return 0;
 }
 
-
+//Method that does Write call backing
 static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp)
 {
 	((std::string*)userp)->append((char*)contents, size * nmemb);
 	return size * nmemb;
 }
 
+//Method that gets the Aquisition methods of items
 std::string Aquisition(std::string data) {
-	std::regex r ("(Acquisition)");
-	std::smatch result;
-	int count = 0;
-	int Aclen = 11;
+#pragma region Old Anchor Method
+	//std::regex r ("(Acquisition)");
+	//std::smatch result;
+	//int count = 0;
+	//int Aclen = 16; //Magic number that acco
 
-	while (count<3) {
-		count++;
-		std::regex_search(data, result, r);
-		data = data.substr(result.position() + Aclen, data.length());
-		print("Current Aquisition ping: %i \n", count);
-	}
-	r = ("(<p)(.*?)(\/p>){1}");
+	//std::regex r("("Contents")");
+
+	//while (count<3) {
+	//	count++;
+	//	std::regex_search(data, result, r);
+	//	data = data.substr(result.position() + Aclen, data.length());
+	//	print("Current Aquisition ping: %i \n", count);
+	//	print("%s\n", data.c_str());
+	//	print("------------------------------------------------------------------------------------------\n"
+	//		  "------------------------------------------------------------------------------------------\n"
+	//		  "------------------------------------------------------------------------------------------\n"
+	//		  "------------------------------------------------------------------------------------------\n");
+	//}
+#pragma endregion
+//^Old mehtod of finding Aquisition area.
+	std::regex r("(id=\"Acquisition\")");
+	std::smatch result;
 	std::regex_search(data, result, r);
+	data = data.substr(result.position(), data.length());
+
+	//r = ("(<p)(.*?)(\/p>)"); // Grabs only what is directly after "Acquisition"
+	//r = ("(<ul)(.*?)(\/ul>)");  //Grabs Aquisitipon methods that are formatted as a list
+	//r= ("(\/h2>)(.*?)(<h2)");	  // Grabs everything between "Acquisition and next Header"
+	r = ("(\/h2>)(.*?)(<h2)");
+	std::regex_search(data, result, r); //Grab everything between Aquisition header and next header
 	data = result.str();
+	r = ("(<ul)(.*?)(\/ul>)"); //
+	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a list for the methods
+		data = result.str();
+	}
+	r = ("(<p)(.*?)(\/p>)");
+	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a paragraph for the methods
+		data = result.str();
+	}
+
+
+	//std::regex_search(data, result, r);
+	//data = result.str();
 	//print("PRINTING DATA RESULTS: %s\n", result.str().c_str());
 	return data;
 }

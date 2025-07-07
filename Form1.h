@@ -111,12 +111,12 @@ namespace CppCLRWinFormsProject {
 
 	}
 	private: System::Void searchButton_Click(System::Object^ sender, System::EventArgs^ e) {
-		print("Search Button Clicked");
+		print("Search Button Clicked\n");
 		msclr::interop::marshal_context context;
 		searchItem = context.marshal_as<std::string>(searchBox->Text);
-		print("Search Item assigned as:%s",searchItem.c_str());
+		print("Search Item assigned as:%s\n",searchItem.c_str());
 		std::string url = "https://warframe.fandom.com/wiki/" + searchItem;
-		print("Searching for url:%s", url.c_str());
+		print("Searching for url:%s\n", url.c_str());
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
 		std::string WebpageData = "";
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -126,7 +126,7 @@ namespace CppCLRWinFormsProject {
 		std::regex n("\\n");
 		WebpageData=std::regex_replace(WebpageData, n, "");
 		WebpageData = Aquisition(WebpageData);
-		print("%s",WebpageData.c_str());
+		print("%s\n",WebpageData.c_str());
 		String^ dataBoxContent= gcnew String(WebpageData.c_str());
 		dataReturnBox->Text = dataBoxContent;
 		
