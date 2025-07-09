@@ -126,7 +126,7 @@ namespace CppCLRWinFormsProject {
 		std::regex n("\\n");
 		WebpageData=std::regex_replace(WebpageData, n, "");
 		WebpageData = Aquisition(WebpageData);
-		print("%s\n",WebpageData.c_str());
+		//print("%s\n",WebpageData.c_str());
 		String^ dataBoxContent= gcnew String(WebpageData.c_str());
 		dataReturnBox->Text = dataBoxContent;
 		

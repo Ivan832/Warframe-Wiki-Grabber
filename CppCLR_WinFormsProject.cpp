@@ -7,8 +7,10 @@
 #include <WinUser.h>
 
 
+
 using namespace System;
 CURL* curl;
+std::string searchItem = "";
 
 // int main(array<System::String ^> ^args)
 // {
@@ -43,9 +45,6 @@ int main()
 	Application::Run(formInst);
 	curl_easy_cleanup(curl);
 	print("Hello");
-	/*Application::EnableVisualStyles();
-	Application::SetCompatibleTextRenderingDefault(false);
-	Application::Run(gcnew CppCLRWinFormsProject::Form1());*/
 
 	return 0;
 }
@@ -84,6 +83,7 @@ std::string Aquisition(std::string data) {
 	std::smatch result;
 	std::regex_search(data, result, r);
 	data = data.substr(result.position(), data.length());
+	std::string endInfo = "";
 
 	//r = ("(<p)(.*?)(\/p>)"); // Grabs only what is directly after "Acquisition"
 	//r = ("(<ul)(.*?)(\/ul>)");  //Grabs Aquisitipon methods that are formatted as a list
@@ -91,18 +91,21 @@ std::string Aquisition(std::string data) {
 	r = ("(\/h2>)(.*?)(<h2)");
 	std::regex_search(data, result, r); //Grab everything between Aquisition header and next header
 	data = result.str();
-	r = ("(<ul)(.*?)(\/ul>)"); //
-	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a list for the methods
-		data = result.str();
-	}
 	r = ("(<p)(.*?)(\/p>)");
 	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a paragraph for the methods
 		data = result.str();
+		endInfo=Format(data);
 	}
+	r = ("(<ul)(.*?)(\/ul>)"); //
+	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a list for the methods
+		data = result.str();
+		endInfo = data;
+	}
+	
 
 
 	//std::regex_search(data, result, r);
 	//data = result.str();
 	//print("PRINTING DATA RESULTS: %s\n", result.str().c_str());
-	return data;
+	return endInfo;
 }
