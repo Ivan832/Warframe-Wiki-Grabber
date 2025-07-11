@@ -112,9 +112,14 @@ namespace CppCLRWinFormsProject {
 	}
 	private: System::Void searchButton_Click(System::Object^ sender, System::EventArgs^ e) {
 		print("Search Button Clicked\n");
+		//convert text box content to a string to work with
 		msclr::interop::marshal_context context;
 		searchItem = context.marshal_as<std::string>(searchBox->Text);
 		print("Search Item assigned as:%s\n",searchItem.c_str());
+		//format string for searching by replaces spaces with _
+		std::regex space(" ");
+		searchItem=std::regex_replace(searchItem, space, "_");
+		//search url for web/wiki page to scrape
 		std::string url = "https://warframe.fandom.com/wiki/" + searchItem;
 		print("Searching for url:%s\n", url.c_str());
 		curl_easy_setopt(curl, CURLOPT_URL, url.c_str());

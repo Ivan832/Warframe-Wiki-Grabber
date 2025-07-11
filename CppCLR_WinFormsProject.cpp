@@ -99,7 +99,7 @@ std::string Aquisition(std::string data) {
 	r = ("(<ul)(.*?)(\/ul>)"); //
 	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a list for the methods
 		data = result.str();
-		endInfo = data;
+		endInfo = Format(data);
 	}
 	
 
