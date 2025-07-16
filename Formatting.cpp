@@ -11,9 +11,20 @@ bool replaceString(std::string& str, const std::string& from, const std::string&
 }
 // The above method is needed to deal with segements of html that invovle special characters, mainly ones that would cause trouble with Regex
 std::string Format(std::string Input) {
+	std::string result = "";
 	//Format <p>
-	std::regex tag("<p>|<\\/p>");
-	std::string result="";
+	std::regex tag("<p>.*<\\/p>");
+	std::smatch paragraphSegs;
+	std::string paragraphHolder = "";
+	int paragraphCounter = 0;
+	if (std::regex_match(Input, paragraphSegs, tag)) {
+		while (paragraphSegs.size()) {
+			paragraphHolder.append(paragraphSegs[paragraphCounter].str());
+			paragraphCounter++;
+		}
+		Input = paragraphHolder;
+	}
+	tag=("<p>|<\\/p>");
 	Input=std::regex_replace(Input, tag, "");
 	
 	//Format Hyperlinks
@@ -37,11 +48,13 @@ std::string Format(std::string Input) {
 			replaceString(Input, regexResult.str(), titleHolder);//Replace entire html segment with only the Title 
 			//print("%s\n", Input.c_str());
 		}
-		
 	}
 	
 	//Format html Lists
-	//tag="<ul.*"
+	tag = ("<li>");
+	Input = std::regex_replace(Input, tag, "\n");
+	tag = ("<\\/li>");
+	Input = std::regex_replace(Input, tag, "");
 	result = Input.c_str();
 	return result;
 	

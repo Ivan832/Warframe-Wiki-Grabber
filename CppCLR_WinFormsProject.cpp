@@ -90,17 +90,21 @@ std::string Aquisition(std::string data) {
 	//r= ("(\/h2>)(.*?)(<h2)");	  // Grabs everything between "Acquisition and next Header"
 	r = ("(\/h2>)(.*?)(<h2)");
 	std::regex_search(data, result, r); //Grab everything between Aquisition header and next header
+	print("%s\n",result.str().c_str());
 	data = result.str();
-	r = ("(<p)(.*?)(\/p>)");
-	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a paragraph for the methods
-		data = result.str();
-		endInfo=Format(data);
-	}
-	r = ("(<ul)(.*?)(\/ul>)"); //
-	if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a list for the methods
-		data = result.str();
-		endInfo = Format(data);
-	}
+	endInfo = Format(data);
+#pragma region Old Format section
+	//r = ("(<p)(.*?)(\/p>)");
+	//if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a paragraph for the methods
+	//	data = result.str();
+	//	endInfo=Format(data);
+	//}
+	//r = ("(<ul)(.*?)(\/ul>)"); //
+	//if (std::regex_search(data, result, r)) { //Check if the Aquisition Area has a list for the methods
+	//	data = result.str();
+	//	endInfo = Format(data);
+	//}
+#pragma endregion
 	
 
 
