@@ -128,8 +128,12 @@ namespace CppCLRWinFormsProject {
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &WebpageData);
 		curl_easy_perform(curl);
 		//Clear new lines from webdata "\n"
-		std::regex n("\\n");
-		WebpageData=std::regex_replace(WebpageData, n, "");
+		//std::regex n("\n");
+		//WebpageData=std::regex_replace(WebpageData, n, "");
+		while (WebpageData.find("\n") != std::string::npos)
+		{
+			WebpageData.erase(WebpageData.find("\n"), 1);
+		}
 		WebpageData = Aquisition(WebpageData);
 		//print("%s\n",WebpageData.c_str());
 		String^ dataBoxContent= gcnew String(WebpageData.c_str());
