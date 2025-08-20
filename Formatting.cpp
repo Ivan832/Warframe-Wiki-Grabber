@@ -47,20 +47,27 @@ std::string Format(std::string Input) {
 	std::string result = Input;
 	print("Initial Data result:\n%s\n", result.c_str());
 	std::regex tag("To Be Redeclared");
+
 	//Format <h2>
 	tag = ("\/h2>|<h2");
 	result = std::regex_replace(result, tag, "");
+	print("Result after formatting h2 Tags:\n%s\n\n", result.c_str());
+
 	//Format <h3?
-	result=IDgrabber(result, "h3");
+	result = IDgrabber(result, "h3");
+	print("Result after formatting h3 Tags:\n%s\n\n", result.c_str());
+
 	//Format <p>
-	
-	tag=("<p>");
-	result=std::regex_replace(result, tag, "");
+	tag = ("<p>");
+	result = std::regex_replace(result, tag, "");
 	tag = ("<\\/p>");
 	result = std::regex_replace(result, tag, "\n");
-	
+	print("Result after formatting <p> Tags:\n%s\n\n", result.c_str());
+
 	//Format Hyperlinks
-	result=IDgrabber(result, "href");
+	result = IDgrabber(result, "href");
+	print("Result after formatting hyperlinks:\n%s\n\n", result.c_str());
+#pragma region Old Hyperlink Formating
 	////Format Hyperlinks
 	//tag = ("<a.*?\\/a>");
 	//std::string titleHolder = "";
@@ -83,14 +90,58 @@ std::string Format(std::string Input) {
 	//		//print("%s\n", result.c_str());
 	//	}
 	//}
-	
+#pragma endregion
+
 	//Format html Lists
+	print("\n\n\n TESTING LIST FORMATING \n\n\n");
 	tag = ("<li>");
-	result = std::regex_replace(result, tag, "\n");
-	tag = ("<\\/li>");
+	std::smatch listresult;
+	int listamount = 0;
+	print("listamount value= %i\n", listamount);
+	while (std::regex_search(result, listresult, tag)) {// if a list tag is detected
+		listamount += 1; //keep track of how many list items are found
+		print("listamount value= %i\n", listamount);
+		replaceString(result, "<li>", "\n--");
+		replaceString(result, "</li>", "");
+	}
+	if (listamount == 1) { // if only 1 list item is found(for some reason?) treat like a single acquisition method instead of a list
+		print("listamount value= %i\n", listamount);
+		print("One List Object Found\n");
+		replaceString(result, "\n--", "");
+	}
+	tag = ("<ul>");
 	result = std::regex_replace(result, tag, "");
+	tag = ("<\\/ul>");
+	result = std::regex_replace(result, tag, "");
+	print("Result after formatting list Tags:\n%s\n\n", result.c_str());
+
+	//Format Tables
+	tag = ("<table.*\/table>");
+	std::smatch tableResult;
+	std::regex_search(result, tableResult, tag);
+	std::string tableHolder = tableResult.str();
+	replaceString(result, tableHolder, "");
+	print("Result after formatting table Tags:\n%s\n\n", result.c_str());
+
+	//Format "Div style" sections
+	tag = ("(<div style)(.*?)(<\/div>)");
+	result = std::regex_replace(result, tag, "");
+	print("Result after formatting Div style section:\n%s\n\n", result.c_str());
+
+	//Format <br> tags
+	tag = ("(<br)(.*?)(>)");
+	result = std::regex_replace(result, tag, "");
+	print("Result after formatting <br> tags:\n%s\n\n", result.c_str());
+
+	//Foramt <b> (BOLD) tags
+	tag = ("<b>|<\\/b>");
+	result = std::regex_replace(result, tag, "");
+	print("Result after formatting <b> tags:\n%s\n\n", result.c_str());
+
+
+
 	result = result.c_str();
 	return result;
-	
-	
+
+
 }

@@ -113,3 +113,4 @@ std::string Aquisition(std::string data) {
 	//print("PRINTING DATA RESULTS: %s\n", result.str().c_str());
 	return endInfo;
 }
+
